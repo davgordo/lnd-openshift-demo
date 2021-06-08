@@ -1,0 +1,40 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: blockchain
+spec:
+  ports:
+    - name: 8333-tcp
+      protocol: TCP
+      port: 8333
+      targetPort: 8333
+    - name: 8334-tcp
+      protocol: TCP
+      port: 8334
+      targetPort: 8334
+    - name: 18333-tcp
+      protocol: TCP
+      port: 18333
+      targetPort: 18333
+    - name: 18334-tcp
+      protocol: TCP
+      port: 18334
+      targetPort: 18334
+    - name: 18555-tcp
+      protocol: TCP
+      port: 18555
+      targetPort: 18555
+    - name: 18556-tcp
+      protocol: TCP
+      port: 18556
+      targetPort: 18556
+    - name: 28901-tcp
+      protocol: TCP
+      port: 28901
+      targetPort: 28901
+    - name: 28902-tcp
+      protocol: TCP
+      port: 28902
+      targetPort: 28902
+  selector:
+    deployment: btcd

@@ -1,0 +1,25 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: btcd
+  name: btcd
+spec:
+  failedBuildsHistoryLimit: 3
+  output:
+    to:
+      kind: ImageStreamTag
+      name: btcd:latest
+  runPolicy: Serial
+  source:
+    contextDir: docker/btcd
+    git:
+      uri: https://github.com/lightningnetwork/lnd.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      from:
+        kind: DockerImage
+        name: alpine:latest
+    type: Docker
+  successfulBuildsHistoryLimit: 1

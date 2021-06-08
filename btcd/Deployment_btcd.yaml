@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"btcd:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"btcd\")].image"}]'
+  name: btcd
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      deployment: btcd
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        deployment: btcd
+    spec:
+      containers:
+      - args:
+        - ./start-btcd.sh
+        image: ' '
+        name: btcd
+        ports:
+        - containerPort: 8333
+          protocol: TCP
+        - containerPort: 8334
+          protocol: TCP
+        - containerPort: 18333
+          protocol: TCP
+        - containerPort: 18334
+          protocol: TCP
+        - containerPort: 18555
+          protocol: TCP
+        - containerPort: 18556
+          protocol: TCP
+        - containerPort: 28901
+          protocol: TCP
+        - containerPort: 28902
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /rpc/rpc.cert
+          name: rpc-cert
+          subPath: tls.crt
+        - mountPath: /rpc/rpc.key
+          name: rpc-cert
+          subPath: tls.key
+        - mountPath: .btcd
+          name: btcd-home
+        - mountPath: data
+          name: btcd-data
+      volumes:
+      - name: rpc-cert
+        secret:
+          defaultMode: 420
+          secretName: btcd-rpc-tls
+      - name: btcd-home
+        emptyDir: {}
+      - name: btcd-data
+        persistentVolumeClaim:
+          claimName: btcd-data

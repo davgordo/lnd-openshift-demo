@@ -1,0 +1,25 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    build: lnd
+  name: lnd
+spec:
+  failedBuildsHistoryLimit: 3
+  output:
+    to:
+      kind: ImageStreamTag
+      name: lnd:latest
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/lightningnetwork/lnd.git
+    type: Git
+  strategy:
+    dockerStrategy:
+      dockerfilePath: dev.Dockerfile
+      from:
+        kind: DockerImage
+        name: alpine:latest
+    type: Docker
+  successfulBuildsHistoryLimit: 1

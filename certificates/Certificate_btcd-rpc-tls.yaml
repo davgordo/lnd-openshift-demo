@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1alpha2
+kind: Certificate
+metadata:
+  name: btcd-rpc-tls
+spec:
+  secretName: btcd-rpc-tls
+  issuerRef:
+    name: rootca
+  commonName: blockchain
+  usages:
+    - server auth
+  dnsNames:
+  - blockchain
+  - btcd
+  - localhost
+  keyEncoding: pkcs8

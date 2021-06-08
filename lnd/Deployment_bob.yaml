@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"lnd:latest"},"fieldPath":"spec.template.spec.containers[?(@.name==\"lnd\")].image"}]'
+  name: bob
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      deployment: bob
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        deployment: bob
+    spec:
+      containers:
+      - args:
+        - ./start-lnd.sh
+        image: ' '
+        name: lnd
+        ports:
+        - containerPort: 10009
+          protocol: TCP
+        - containerPort: 9735
+          protocol: TCP
+        volumeMounts:
+        - mountPath: .lnd
+          name: lnd-home
+        - mountPath: /rpc/rpc.cert
+          name: rpc-cert
+          subPath: tls.crt
+      volumes:
+      - name: lnd-home
+        persistentVolumeClaim:
+          claimName: bob
+      - name: rpc-cert
+        secret:
+          defaultMode: 420
+          secretName: btcd-rpc-tls

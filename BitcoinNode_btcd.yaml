@@ -1,0 +1,10 @@
+apiVersion: bitcoin.kiln-fired.github.io/v1alpha1
+kind: BitcoinNode
+metadata:
+  name: btcd
+  namespace: kiln
+spec:
+  rpcServer:
+    certSecret: btcd-rpc-tls
+    user: node-user
+    password: st4cks4ts
